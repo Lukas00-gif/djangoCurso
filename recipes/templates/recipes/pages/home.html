@@ -1,17 +1,13 @@
-{% include 'recipes/partials/home_head.html' %}
+{% extends 'global/base.html' %}
 
-<body>
-    {% include 'recipes/partials/home_header.html' %}
+{% block title %} Home | {% endblock title %}
 
-    {% include 'recipes/partials/home_search.html' %}
-
-    <main class="main-content-container">
-        <div class="main-content main-content-list container">
+{% block 'content' %}
+    <div class="main-content main-content-list container">
+        <!-- aki quando eu uso a variavel recipe para gerar os dados e ordenar com o for -->
+        <!-- ela automaticamente fica disponivel dentro do home_recipes, a variavel recipe -->
+        {% for recipe in recipes %}
             {% include 'recipes/partials/home_recipes.html' %}
-        </div>
-    </main>
-</body>
-
-{% include 'recipes/partials/home_footer.html' %}
-
-</html>
+        {% endfor %}
+    </div>
+{% endblock %}
