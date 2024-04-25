@@ -129,6 +129,10 @@ STATICFILES_DIRS = [
 #static root e para jogar no deploy
 STATIC_ROOT = BASE_DIR / 'static'
 
+#media sao arquivos enviador pelo usuarios
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
