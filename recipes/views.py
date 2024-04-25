@@ -14,5 +14,6 @@ def repice(request, id):
     return render(request, 'recipes/pages/recipe-view.html', context={
         #esse recipes aki de baixo, recebi somente um ja que em detailss e somente um
         #receita
-        'recipe': make_recipe()
+        'recipe': make_recipe(),
+        'is_detail_page': True
     })

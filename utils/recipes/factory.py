@@ -13,13 +13,14 @@ fake = Faker('pt_BR')
 
 def make_recipe():
     return {
+        'id': fake.random_number(digits=2, fix_len=True), 
         'title': fake.sentence(nb_words=6),
         'description': fake.sentence(nb_words=12),
         'preparation_time': fake.random_number(digits=2, fix_len=True),
         'preparation_time_unit': 'Minutos',
         'servings': fake.random_number(digits=2, fix_len=True),
         'servings_unit': 'Porções',
-        'preparation_steps': fake.text(3000),
+        'preparation_steps': fake.text(1000),
         'created_at': fake.date_time(),
         'author': {
             'first_name': fake.first_name(),
