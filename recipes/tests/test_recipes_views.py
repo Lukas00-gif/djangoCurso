@@ -1,5 +1,5 @@
 from django.urls import reverse, resolve
-from .test_recipe_base import RecipeTesteBase, Recipe
+from .test_recipe_base import RecipeTesteBase
 
 from recipes import views
 
@@ -35,6 +35,7 @@ class RecipeViewsTest(RecipeTesteBase):
     #teste com conteudo na home
     def test_recipe_home_template_loads_recipes(self):
         self.make_recipe()
+
         response = self.client.get(reverse('recipes:recipes-home'))
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
@@ -43,9 +44,20 @@ class RecipeViewsTest(RecipeTesteBase):
         self.assertIn('10 minutos', content)
         self.assertIn('5 porçoes', content)
         self.assertEqual(len(response_context_recipes), 1)
+    
+    def teste_recipe_home_template_dont_load_recipes_not_published(self):
+        """ test recipe is_published false not show the recipe """
+
+        self.make_recipe(is_published=False)
+        
+        response = self.client.get(reverse('recipes:recipes-home'))
+        self.assertIn(
+            '<h1>No recipes found Here<h1>',
+            response.content.decode('utf-8')
+        )
 
 
-    #recipe
+    #category
     def test_recipe_category_view_function_is_correct(self):
         view = resolve(
             reverse('recipes:category', kwargs={'category_id': 1000})
@@ -59,8 +71,26 @@ class RecipeViewsTest(RecipeTesteBase):
         )
         self.assertEqual(response.status_code, 404)
     
+    def test_recipe_category_template_loads_recipes(self):
+        needed_title = 'This is a category test'
+        self.make_recipe(title=needed_title)
+        
+        response = self.client.get(reverse('recipes:category', args=(1,)))
+        content = response.content.decode('utf-8')
 
-#detail
+        self.assertIn(needed_title, content)
+    
+    def teste_recipe_category_template_dont_load_recipes_not_published(self):
+        """ test recipe is_published false not show the recipe """
+
+        self.make_recipe(is_published=False)
+        
+        response = self.client.get(reverse('recipes:category', kwargs={'category_id': 1}))
+        
+        self.assertEqual(response.status_code, 404)
+    
+
+    #detail
     def test_recipe_detail_view_function_is_correct(self):
         view = resolve(
             reverse('recipes:recipe', kwargs={'id': 1})
@@ -72,4 +102,22 @@ class RecipeViewsTest(RecipeTesteBase):
         response = self.client.get(
             reverse('recipes:recipe', kwargs={'id': 1000})
         )
+        self.assertEqual(response.status_code, 404)
+    
+    def test_recipe_detail_template_loads_the_correct_recipes(self):
+        needed_title = 'This is a detail page - It load one recipe'
+        self.make_recipe(title=needed_title)
+        
+        response = self.client.get(reverse('recipes:recipe', args=(1,)))
+        content = response.content.decode('utf-8')
+
+        self.assertIn(needed_title, content)
+    
+    def teste_recipe_detail_template_dont_load_recipe_not_published(self):
+        """ test recipe is_published false not show the recipe """
+
+        self.make_recipe(is_published=False)
+        
+        response = self.client.get(reverse('recipes:recipe', kwargs={'id': 1}))
+        
         self.assertEqual(response.status_code, 404)
