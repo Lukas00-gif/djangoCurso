@@ -8,14 +8,14 @@ class RecipeModelTest(RecipeTesteBase):
         self.recipe = self.make_recipe()
         return super().setUp()
     
-    def make_recipe_no_defauls(self):
+    def make_recipe_no_defaults(self):
         recipe = Recipe(
             #os nomes devem ser diferentes
             category = self.make_category(name='Test Default Category'),
             author = self.make_author(username='newusername'),    
             title = 'Recipe Title',
             description = 'Recipe Description',
-            slug = 'Recipe-slug',
+            slug = 'Recipe-slug-for-no-default',
             preparation_time = '10',
             preparation_time_unit = 'minutos',
             servings = '5',
@@ -59,14 +59,14 @@ class RecipeModelTest(RecipeTesteBase):
     # testar isso e valido ja que o false no default ele muda a estrutura logica
     # do model
     def test_recipe_preparation_steps_is_html_is_false_by_default(self):
-        recipe = self.make_recipe_no_defauls()
+        recipe = self.make_recipe_no_defaults()
         recipe.full_clean()
         recipe.save()
         self.assertFalse(recipe.preparation_step_is_html,
                         msg='preparations steps in model is not True is False for default')
         
     def test_recipe_is_published_is_false_by_default(self):
-        recipe = self.make_recipe_no_defauls()
+        recipe = self.make_recipe_no_defaults()
         recipe.full_clean()
         recipe.save()
         self.assertFalse(recipe.is_published,
