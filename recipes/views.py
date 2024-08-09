@@ -1,21 +1,25 @@
 from django.http import Http404
 from django.shortcuts import render, get_list_or_404, get_object_or_404
-from utils.recipes.factory import make_recipe
-from django.core.paginator import Paginator
 from django.db.models import Q
 
 from utils.pagination import make_pagination
 from .models import Recipe
 
+import os
+
 # estou importando o factory o make_recipe que cria basicamente
 #varios nomes aleatorios para ajudar no preenchimento
+
+
+PER_PAGE = int(os.environ.get('PER_PAGE', 3))
+
 
 def home(request):
     recipes = Recipe.objects.filter(
         is_published=True,
         ).order_by('-id')
     
-    page_obj, pagination_range = make_pagination(request, recipes, 9)
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
 
     return render(request, 'recipes/pages/home.html', context={
@@ -35,7 +39,7 @@ def category(request, category_id):
             is_published=True,
         ).order_by('-id'))
     
-    page_obj, pagination_range = make_pagination(request, recipes, 9)
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
     return render(request, 'recipes/pages/category.html', context={
         #esse recipes aki de baixo recebi a lista aleatoria gerada
@@ -78,7 +82,7 @@ def search(request):
         )
     ).order_by('-id')
 
-    page_obj, pagination_range = make_pagination(request, recipes, 9)
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
     return render(request, 'recipes/pages/search.html', {
         'page_title': f'Search for { search_term } |',

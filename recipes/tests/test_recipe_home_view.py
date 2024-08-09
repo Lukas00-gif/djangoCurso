@@ -1,5 +1,6 @@
 from django.urls import reverse, resolve
 from .test_recipe_base import RecipeTesteBase
+from unittest.mock import patch
 
 from recipes import views
 
@@ -55,3 +56,22 @@ class RecipeHomeViewTest(RecipeTesteBase):
             '<h1>No recipes found Here<h1>',
             response.content.decode('utf-8')
         )
+    
+    #test mockado
+    # test mockado seria uma simulaçao ne uma variavel que n pode ser mudada por algum
+    #motivo no caso aki seria PER_PAGE
+    def test_recipe_home_is_paginated(self):
+        for i in range(8):
+            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            self.make_recipe(**kwargs)
+
+        with patch('recipes.views.PER_PAGE', new = 3):
+            response = self.client.get(reverse('recipes:recipes-home'))
+            recipes = response.context['recipes']
+            paginator = recipes.paginator
+
+            self.assertEqual(paginator.num_pages, 3)
+            #nessa pagina 1 deve ter 3 receita na 2 e na 3 tbm respectivamente
+            self.assertEqual(len(paginator.get_page(1)), 3)
+            self.assertEqual(len(paginator.get_page(2)), 3)
+            self.assertEqual(len(paginator.get_page(3)), 2)
