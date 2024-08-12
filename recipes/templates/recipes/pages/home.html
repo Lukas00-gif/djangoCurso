@@ -3,6 +3,9 @@
 {% block title %} Home | {% endblock title %}
 
 {% block 'content' %}
+
+{% include 'recipes/partials/messages.html' %}
+
     <div class="main-content main-content-list container">
         <!-- esse for e como se fosse um if -->
         {% for recipe in recipes  %}
