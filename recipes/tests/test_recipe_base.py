@@ -1,14 +1,8 @@
 from django.test import TestCase
 from recipes.models import Category, Recipe, User
 
-#aqui e a base serve para serpar as classes e fazer reutilizar das mesmas
-# ou seja separando as classes dessa forma, vai herdar tudo os testes e quando for para
-# precisar fazer uma teste com fixture(dados para os testes) e so chamar essa funcoes
-#make_caategory, make_recipe ou make_author
-class RecipeTesteBase(TestCase):
-    def setUp(self) -> None:
-        return super().setUp()
-    
+
+class RecipeMixin:
     def make_category(self, name='Category'):
         return Category.objects.create(name=name)
     
@@ -68,5 +62,24 @@ class RecipeTesteBase(TestCase):
             is_published = is_published,
             cover = cover
         )
+    
+    def make_recipe_in_batch(self, qtd=10):
+        recipes = []
+        for i in range(qtd):
+            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            recipe = self.make_recipe(**kwargs)
+            recipes.append(recipe)
+        return recipes
+
+
+#aqui e a base serve para serpar as classes e fazer reutilizar das mesmas
+# ou seja separando as classes dessa forma, vai herdar tudo os testes e quando for para
+# precisar fazer uma teste com fixture(dados para os testes) e so chamar essa funcoes
+#make_caategory, make_recipe ou make_author
+#agora usando o RecipeMixin para herdar todo
+class RecipeTesteBase(TestCase, RecipeMixin):
+    def setUp(self) -> None:
+        return super().setUp()
+    
         
         
