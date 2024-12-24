@@ -11,7 +11,7 @@ from .forms import RegisterForm, LoginForm
 def register_view(request):
     register_form_data =  request.session.get('register_form_data', None)
     form = RegisterForm(register_form_data)
-        
+
     return render(request, 'authors/pages/resgister_view.html', {
         'form': form,
         'form_action' : reverse('authors:register_create'),
@@ -24,24 +24,22 @@ def register_create(request):
     
     #ta salvando o dicionario do post inteiro ou seja os dados do form
     POST = request.POST
-    request.session['register_for_data'] = POST
+    request.session['register_form_data'] = POST
     form = RegisterForm(POST)
 
     if form.is_valid():
+        messages.error(request, 'ELE ENTROU NO IF')
         user = form.save(commit=False)
         user.set_password(user.password)
         user.save()
         messages.success(request, 'Your user is created, please log in')
 
-        #deletar a sessao depois de salva
+        # deletar a sessao depois de salva
         del(request.session['register_for_data'])
         return redirect(reverse('authors:login'))
 
     return redirect('authors:register')
 
-    # return render(request, 'authors/pages/resgister_view.html', {
-    #     'form': form,
-    # })
 
 def login_view(request):
     form = LoginForm()

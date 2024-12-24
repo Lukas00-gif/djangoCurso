@@ -8,13 +8,14 @@ from utils.django_forms import add_placeholder, strong_password
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        add_placeholder(self.fields['username'], 'Your username')
+        add_placeholder(self.fields['username'], 'Your username',)
         add_placeholder(self.fields['email'], 'Your e-mail')
         add_placeholder(self.fields['first_name'], 'Ex.: John')
         add_placeholder(self.fields['last_name'], 'Ex.: Doe')
         add_placeholder(self.fields['password'], 'Type your password')
         add_placeholder(self.fields['password2'], 'Repeat your password')
 
+    # USER
     username = forms.CharField(
         label='Username',
         help_text=(
@@ -29,22 +30,26 @@ class RegisterForm(forms.ModelForm):
         min_length=4, max_length=150,
     )
 
+    # PRIMEIRO NOME
     first_name = forms.CharField(
         error_messages={'required': 'Write your first name'},
-        label='First name'
+        label='first name'
     )
 
+    # ULTIMO NOME
     last_name = forms.CharField(
         error_messages={'required': 'Write your last name'},
         label='Last name'
     )
 
+    # EMAIL
     email = forms.EmailField(
         error_messages={'required': 'E-mail is required'},
         label='E-mail',
         help_text='The e-mail must be valid.',
     )
 
+    # SENHA
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
@@ -59,6 +64,8 @@ class RegisterForm(forms.ModelForm):
         validators=[strong_password],
         label='Password'
     )
+
+    # CONFIRMAR SENHA
     password2 = forms.CharField(
         widget=forms.PasswordInput(),
         label='Password2',
@@ -66,6 +73,11 @@ class RegisterForm(forms.ModelForm):
             'required': 'Please, repeat your password'
         }
     )
+    error_messages={
+        'username': {
+            'required': 'THIS FIELD MUST NOT BE EMPTY!!!!!!'
+        }
+    }
 
 
     class Meta:
