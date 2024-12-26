@@ -61,7 +61,7 @@ class RegisterForm(forms.ModelForm):
             'one lowercase letter and one number. The length should be '
             'at least 8 characters.'
         ),
-        validators=[strong_password],
+        #validators=[strong_password],
         label='Password'
     )
 
@@ -88,6 +88,7 @@ class RegisterForm(forms.ModelForm):
             'username',
             'email',
             'password',
+            'password2',
         ]
 
         def clean_email(self):
@@ -100,23 +101,23 @@ class RegisterForm(forms.ModelForm):
 
             return email
 
-def clean(self):
-    cleaned_data = super().clean()
+    def clean(self):
+        cleaned_data = super().clean()
 
-    password = cleaned_data.get('password')
-    password2 = cleaned_data.get('password2')
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
 
-    if password != password2:
-        password_confirmation_error = ValidationError(
-            'Password and password2 must be equal',
-            code='invalid'
-        )
-        raise ValidationError({
-            'password': password_confirmation_error,
-            'password2': [
-                password_confirmation_error,
-            ],
-        })
+        if password != password2:
+            password_confirmation_error = ValidationError(
+                'Password and password2 must be equal',
+                code='invalid'
+            )
+            raise ValidationError({
+                'password': password_confirmation_error,
+                'password2': [
+                    password_confirmation_error,
+                ],
+            })
 
 
 

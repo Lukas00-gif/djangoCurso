@@ -28,14 +28,13 @@ def register_create(request):
     form = RegisterForm(POST)
 
     if form.is_valid():
-        messages.error(request, 'ELE ENTROU NO IF')
         user = form.save(commit=False)
         user.set_password(user.password)
         user.save()
         messages.success(request, 'Your user is created, please log in')
 
         # deletar a sessao depois de salva
-        del(request.session['register_for_data'])
+        del(request.session['register_form_data'])
         return redirect(reverse('authors:login'))
 
     return redirect('authors:register')
