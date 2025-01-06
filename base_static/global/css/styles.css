@@ -414,6 +414,10 @@ ul {
     color: var(--color-debug-dark);
 }
 
+.login-message{
+    margin: 1rem 0;
+}
+
 .center {
     text-align: center;
 }
