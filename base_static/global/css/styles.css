@@ -68,6 +68,15 @@ h6 {
     font-family: var(--font-headings);
 }
 
+img {
+    max-width: 100%;
+}
+
+a{
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
 .container {
     max-width: 115rem;
     margin: 0 auto;
@@ -330,7 +339,9 @@ ul {
     color: var(--color-error-dark);
 }
 
-.form-content input {
+.form-content input,
+.form-content textarea,
+.form-content select {
     width: 100%;
     padding: 1rem;
     border-radius: .5rem;
@@ -361,6 +372,10 @@ ul {
 
 .inline-form{
     display: inline;
+}
+
+.span-2{
+    grid-column: span 2;
 }
 
 /* Messages */
@@ -434,6 +449,10 @@ ul {
 
 .center {
     text-align: center;
+}
+
+.left{
+    text-align: left;
 }
 
 @media(max-width: 600px){
