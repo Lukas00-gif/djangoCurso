@@ -135,10 +135,67 @@ def dashboard_recipe_edit(request, id):
         return redirect(reverse('authors:dashboard_recipe_edit', args=(id,)))
 
 
-
     return render(request, 'authors/pages/dashboard_recipe.html',{
         'form': form
     })
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_recipe_new(request):
+    form = AuthorRecipeForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+    )
+
+    if form.is_valid():
+        recipe: Recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparation_steps_is_html = False
+        recipe.is_published = False
+
+        recipe.save()
+
+        messages.success(request, 'Salvo com sucesso!')
+        return redirect(
+            reverse('authors:dashboard_recipe_edit', args=(recipe.id,))
+        )
+
+    return render(
+        request,
+        'authors/pages/dashboard_recipe.html',
+        context={
+            'form': form,
+            'form_action': reverse('authors:dashboard_recipe_new')
+        }
+    )
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_recipe_delete(request):
+    if not request.POST:  
+        raise Http404()
+    
+    #ta salvando o dicionario do post inteiro ou seja os dados do form
+    POST = request.POST
+    id = POST.get('id')
+
+    # ele retorna uma query set, entao deve ter o first no final pra nao dar erro
+    recipe = Recipe.objects.filter(
+        is_published=False,
+        author=request.user,
+        pk=id,
+    ).first()
+
+    if not recipe:
+        raise Http404() 
+    
+    recipe.delete()
+    messages.success(request, 'Deleted successfully.')
+    return redirect(reverse('authors:dashboard'))
+
+
+
+
 
 
 
