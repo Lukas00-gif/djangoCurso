@@ -36,6 +36,6 @@ class RecipeDetailViewTest(RecipeTesteBase):
 
         self.make_recipe(is_published=False)
         
-        response = self.client.get(reverse('recipes:recipe', kwargs={'id': 1}))
+        response = self.client.get(reverse('recipes:recipe', kwargs={'pk': 1}))
         
         self.assertEqual(response.status_code, 404)

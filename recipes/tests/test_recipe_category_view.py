@@ -13,7 +13,7 @@ class RecipeCategoryViewTest(RecipeTesteBase):
         view = resolve(
             reverse('recipes:category', kwargs={'category_id': 1000})
         )
-        self.assertIs(view.func, views.category)
+        self.assertIs(view.func.view_class, views.RecipeListViewCategory)
     
     def test_recipe_category_view_returns_404_if_no_recipes_found(self):
         #ele vai pegar o get, da url e retornar o status

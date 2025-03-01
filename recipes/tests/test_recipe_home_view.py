@@ -14,7 +14,7 @@ class RecipeHomeViewTest(RecipeTesteBase):
         view = resolve(reverse('recipes:recipes-home'))
         #compara as duas views se sao iguais usando o is, ou seja se esta apontando para a
         #mesma locaçao de memoria
-        self.assertIs(view.func, views.home)
+        self.assertIs(view.func.view_class, views.RecipeListViewHome)
     
     def test_recipe_home_view_returns_status_200_OK(self):
         #ele vai pegar o get, da url e retornar o status
